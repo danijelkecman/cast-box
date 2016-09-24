@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Cast Box</string>
+
+    <string name="text_no_data">No data to display</string>
+
+    <!-- Dialogs -->
+
+    <string name="dialog_action_ok">OK</string>
+    <string name="dialog_action_delete">Delete</string>
+    <string name="dialog_action_cancel">Cancel</string>
+
+    <string name="dialog_error_title">Error</string>
+    <string name="dialog_general_error_Message">There was an error while making the request</string>
+    <string name="dialog_error_no_connection">No internet connection!</string>
+    <string name="text_view">View</string>
+    <string name="text_collections">Collections</string>
+    <string name="actionbar_spinner_title_country">Country</string>
+    <string name="cast_details">Cast Details</string>
+    <string name="play_item">Play</string>
+
+    <string-array name="spinner_list_item_array">
+        <item>United States</item>
+        <item>United Kingdom</item>
+        <item>Spain</item>
+        <item>France</item>
+        <item>Germany</item>
+        <item>Portugal</item>
+        <item>Canada</item>
+        <item>Australia</item>
+        <item>China</item>
+    </string-array>
+</resources>
