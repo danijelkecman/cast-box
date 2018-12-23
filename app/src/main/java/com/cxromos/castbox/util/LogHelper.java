@@ -1,7 +1,8 @@
 package com.cxromos.castbox.util;
 
-import android.support.compat.BuildConfig;
 import android.util.Log;
+
+import com.cxromos.castbox.BuildConfig;
 
 public class LogHelper {
 

@@ -1,7 +1,6 @@
 package com.cxromos.castbox.ui.main;
 
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,16 +26,16 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class MainActivity extends BaseActivity implements MainMvpView {
 
-    @Bind(R.id.progress_indicator) ProgressBar mProgressBar;
-    @Bind(R.id.recycler_casts) RecyclerView mCastRecycler;
-    @Bind(R.id.swipe_container) SwipeRefreshLayout mSwipeRefresh;
-    @Bind(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.progress_indicator) ProgressBar mProgressBar;
+    @BindView(R.id.recycler_casts) RecyclerView mCastRecycler;
+    @BindView(R.id.swipe_container) SwipeRefreshLayout mSwipeRefresh;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
 
     @Inject CastAdapter mCastAdapter;
     @Inject MainPresenter mMainPresenter;
@@ -49,14 +48,17 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         super.onCreate(savedInstanceState);
         activityComponent().inject(this);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.setDebug(true);
         ButterKnife.bind(this);
+
         mCasts = new ArrayList<>();
 
         setupToolbar();
         setupRecyclerView();
 
         mMainPresenter.attachView(this);
-        mMainPresenter.loadCasts(0, 20, mCountryCode, new ArrayList<Cast>());
+        mMainPresenter.loadCasts(0, 20, mCountryCode, new ArrayList<>());
     }
 
     @Override
@@ -112,7 +114,7 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         final List<String> countries = Arrays.asList(getResources().getStringArray(R.array.spinner_list_item_array));
 
         MenuItem item = menu.findItem(R.id.spinner);
-        Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+        Spinner spinner = (Spinner) item.getActionView();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -150,11 +152,6 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         });
 
         mSwipeRefresh.setColorSchemeResources(R.color.primary);
-        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mMainPresenter.loadCasts(0, 20, mCountryCode, new ArrayList<Cast>());
-            }
-        });
+        mSwipeRefresh.setOnRefreshListener(() -> mMainPresenter.loadCasts(0, 20, mCountryCode, new ArrayList<>()));
     }
 }

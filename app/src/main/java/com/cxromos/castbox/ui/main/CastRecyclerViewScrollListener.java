@@ -18,7 +18,7 @@ public abstract class CastRecyclerViewScrollListener extends RecyclerView.OnScro
     // Sets the starting page index
     private int startingPageIndex = 0;
 
-    RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     public CastRecyclerViewScrollListener(LinearLayoutManager layoutManager) {
         this.mLayoutManager = layoutManager;

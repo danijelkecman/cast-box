@@ -1,6 +1,7 @@
 package com.cxromos.castbox.ui.main;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastHolder> {
@@ -28,16 +29,15 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastHolder> {
     @Inject
     public CastAdapter() { this.mCasts = new ArrayList<>(); }
 
+    @NonNull
     @Override
-    public CastHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_cast, parent, false);
-
+    public CastHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cast, parent, false);
         return new CastHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(CastHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CastHolder holder, int position) {
         final Context context = holder.itemView.getContext();
 
         final Cast cast = mCasts.get(position);
@@ -48,13 +48,7 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastHolder> {
                 .load(cast.coverMedium)
                 .into(holder.castImage);
 
-        holder.castContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                context.startActivity(TrackActivity.getStartIntent(context, cast));
-            }
-        });
+        holder.castContainer.setOnClickListener(v -> context.startActivity(TrackActivity.getStartIntent(context, cast)));
     }
 
     @Override
@@ -62,28 +56,19 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastHolder> {
         return mCasts.size();
     }
 
-    public void setCasts(List<Cast> casts) {
+    void setCasts(List<Cast> casts) {
         mCasts = casts;
         notifyDataSetChanged();
     }
 
     class CastHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.container_cast)
-        View castContainer;
+        @BindView(R.id.container_cast) View castContainer;
+        @BindView(R.id.cast_title) TextView castTitleText;
+        @BindView(R.id.cast_description) TextView castDescriptionText;
+        @BindView(R.id.cast_author) TextView castAuthorText;
+        @BindView(R.id.cast_image) ImageView castImage;
 
-        @Bind(R.id.cast_title)
-        TextView castTitleText;
-
-        @Bind(R.id.cast_description)
-        TextView castDescriptionText;
-
-        @Bind(R.id.cast_author)
-        TextView castAuthorText;
-
-        @Bind(R.id.cast_image)
-        ImageView castImage;
-
-        public CastHolder(View itemView) {
+        CastHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

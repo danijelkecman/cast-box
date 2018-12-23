@@ -11,7 +11,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -22,24 +21,22 @@ import com.cxromos.castbox.data.model.Track;
 import com.cxromos.castbox.service.MusicService;
 import com.cxromos.castbox.ui.base.BaseActivity;
 import com.cxromos.castbox.util.DialogFactory;
-import com.cxromos.castbox.util.ItemClickSupport;
 
 import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 public class TrackActivity extends BaseActivity implements TrackMvpView {
     private static final String TAG = TrackActivity.class.getSimpleName();
 
-    @Bind(R.id.toolbar) Toolbar mToolbar;
-    @Bind(R.id.toolbar_collapsing) CollapsingToolbarLayout mCollapsingToolbar;
-    @Bind(R.id.progress_indicator) ProgressBar mProgressBar;
-    @Bind(R.id.recycler_tracks) RecyclerView mTrackRecycler;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.toolbar_collapsing) CollapsingToolbarLayout mCollapsingToolbar;
+    @BindView(R.id.progress_indicator) ProgressBar mProgressBar;
+    @BindView(R.id.recycler_tracks) RecyclerView mTrackRecycler;
 
     @Inject TracksAdapter mTracksAdapter;
     @Inject TrackPresenter mTrackPresenter;

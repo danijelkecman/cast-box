@@ -36,7 +36,7 @@ public class TrackPresenter extends BasePresenter<TrackMvpView> {
         if (mSubscription != null) mSubscription.unsubscribe();
     }
 
-    public void loadTracks(String key) {
+    void loadTracks(String key) {
         checkViewAttached();
         RxUtil.unsubscribe(mSubscription);
         mSubscription = mDataManager.getTracks(key)

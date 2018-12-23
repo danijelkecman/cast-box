@@ -16,7 +16,7 @@ import retrofit2.http.Query;
 import rx.Observable;
 
 public interface CastBoxService {
-    String ENDPOINT = "http://data.castbox.fm/";
+    String ENDPOINT = "https://data.castbox.fm/";
 
     @GET("top")
     Observable<Casts> getMedia(@Query("country") String country, @Query("skip") int skip, @Query("limit") int limit);

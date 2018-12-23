@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface TrackMvpView extends MvpView {
     void showTracks(List<Track> tracks);
-
     void showTracksEmpty();
-
     void showError();
 }

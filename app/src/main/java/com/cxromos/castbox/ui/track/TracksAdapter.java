@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
@@ -29,14 +30,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.TrackHolder> {
-    static final int STATE_PLAYABLE = 1;
-    static final int STATE_PAUSED = 2;
-    static final int STATE_PLAYING = 3;
+    private static final int STATE_PLAYABLE = 1;
+    private static final int STATE_PAUSED = 2;
+    private static final int STATE_PLAYING = 3;
 
     private List<Track> mTracks;
     private EventBus mEventBus;
@@ -51,7 +52,7 @@ public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.TrackHolde
     }
 
     @Override
-    public TrackHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TrackHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_track, parent, false);
 
@@ -59,7 +60,7 @@ public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.TrackHolde
     }
 
     @Override
-    public void onBindViewHolder(final TrackHolder holder, final int p) {
+    public void onBindViewHolder(@NonNull final TrackHolder holder, final int p) {
         final Context context = holder.itemView.getContext();
 
         final int position = holder.getAdapterPosition();
@@ -77,28 +78,25 @@ public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.TrackHolde
 
         updatePlayIconState(context, holder, track);
 
-        holder.playImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Timber.d("State: " + track.state);
-                if (track.state == STATE_PLAYABLE) {
-                    if(isAnyTrackPlaying(position)) {
-                        notifyDataSetChanged();
-                    }
-                    track.state = STATE_PLAYING;
-                    mEventBus.post(new PlayNewEvent(track));
-                    updatePlayIconState(context, holder, track);
-                } else if (track.state == STATE_PAUSED) {
-                    track.state = STATE_PLAYING;
-                    mEventBus.post(new ResumeEvent());
-                    updatePlayIconState(context, holder, track);
-                } else if(track.state == STATE_PLAYING) {
-                    track.state = STATE_PAUSED;
-                    mEventBus.post(new PauseEvent());
-                    updatePlayIconState(context, holder, track);
+        holder.playImage.setOnClickListener(view -> {
+            Timber.d("State: " + track.state);
+            if (track.state == STATE_PLAYABLE) {
+                if(isAnyTrackPlaying(position)) {
+                    notifyDataSetChanged();
                 }
-                mTracks.set(position, track);
+                track.state = STATE_PLAYING;
+                mEventBus.post(new PlayNewEvent(track));
+                updatePlayIconState(context, holder, track);
+            } else if (track.state == STATE_PAUSED) {
+                track.state = STATE_PLAYING;
+                mEventBus.post(new ResumeEvent());
+                updatePlayIconState(context, holder, track);
+            } else if(track.state == STATE_PLAYING) {
+                track.state = STATE_PAUSED;
+                mEventBus.post(new PauseEvent());
+                updatePlayIconState(context, holder, track);
             }
+            mTracks.set(position, track);
         });
     }
 
@@ -159,11 +157,11 @@ public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.TrackHolde
     }
 
     class TrackHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.track_title) TextView trackTitleText;
-        @Bind(R.id.track_description) TextView trackDescriptionText;
-        @Bind(R.id.track_release_date) TextView trackReleaseDateText;
-        @Bind(R.id.track_image) ImageView trackImage;
-        @Bind(R.id.play_eq) ImageView playImage;
+        @BindView(R.id.track_title) TextView trackTitleText;
+        @BindView(R.id.track_description) TextView trackDescriptionText;
+        @BindView(R.id.track_release_date) TextView trackReleaseDateText;
+        @BindView(R.id.track_image) ImageView trackImage;
+        @BindView(R.id.play_eq) ImageView playImage;
 
         public TrackHolder(View itemView) {
             super(itemView);

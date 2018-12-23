@@ -39,7 +39,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         if (mSubscription != null) mSubscription.unsubscribe();
     }
 
-    public void loadCasts(int skip, int take, String countryCode, final List<Cast> casts) {
+    void loadCasts(int skip, int take, String countryCode, final List<Cast> casts) {
         checkViewAttached();
         RxUtil.unsubscribe(mSubscription);
         if (countryCode == null || countryCode.isEmpty()) {
