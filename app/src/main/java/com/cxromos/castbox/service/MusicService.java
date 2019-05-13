@@ -50,13 +50,13 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     private static final int REQUEST_CODE = 100;
 
     //MediaSession
-    private MediaSessionManager mManager;
-    private MediaSession mSession;
-    private MediaController mController;
+    private MediaSessionManager mediaSessionManager;
+    private MediaSession mediaSession;
+    private MediaController mediaController;
 
     private MediaPlayer mediaPlayer;
-    // url to the mTrack
-    private Track mTrack;
+    // url to the track
+    private Track track;
     // used to pause/resume MediaPlayer
     private int resumePosition;
     //Handle incoming phone calls
@@ -64,12 +64,12 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     private PhoneStateListener phoneStateListener;
     private TelephonyManager telephonyManager;
 
-    private Cast mCast;
+    private Cast cast;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand");
-        if(mManager == null) {
+        if(mediaSessionManager == null) {
             initMediaSessions();
         }
 
@@ -79,10 +79,10 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
         }
 
         if (intent != null) {
-            mCast = intent.getParcelableExtra(TrackActivity.EXTRA_CAST);
-            mTrack = intent.getParcelableExtra(EXTRA_TRACK);
-            Log.d(TAG, "mCast: " + mCast);
-            Log.d(TAG, "mTrack: " + mTrack);
+            cast = intent.getParcelableExtra(TrackActivity.EXTRA_CAST);
+            track = intent.getParcelableExtra(EXTRA_TRACK);
+            Log.d(TAG, "cast: " + cast);
+            Log.d(TAG, "track: " + track);
         }
         return START_STICKY;
         //return super.onStartCommand(intent, flags, startId);
@@ -107,8 +107,8 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
             stopMedia();
             mediaPlayer.release();
         }
-        if (mSession != null) {
-            mSession.release();
+        if (mediaSession != null) {
+            mediaSession.release();
         }
 
         if (phoneStateListener != null) {
@@ -120,11 +120,11 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
         if (mediaPlayer == null) {
             initMediaPlayer();
         }
-        mManager = (MediaSessionManager) getSystemService(Context.MEDIA_SESSION_SERVICE);
-        mSession = new MediaSession(getApplicationContext(), "simple player session");
-        mController = new MediaController(getApplicationContext(), mSession.getSessionToken());
+        mediaSessionManager = (MediaSessionManager) getSystemService(Context.MEDIA_SESSION_SERVICE);
+        mediaSession = new MediaSession(getApplicationContext(), "simple player session");
+        mediaController = new MediaController(getApplicationContext(), mediaSession.getSessionToken());
 
-        mSession.setCallback(new MediaSession.Callback() {
+        mediaSession.setCallback(new MediaSession.Callback() {
             @Override
             public void onPlay() {
                 super.onPlay();
@@ -163,29 +163,29 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
 
     private void handleAction(String action) {
         if (action.equalsIgnoreCase(ACTION_PLAY)) {
-            mController.getTransportControls().play();
+            mediaController.getTransportControls().play();
         } else if (action.equalsIgnoreCase(ACTION_PAUSE)) {
-            mController.getTransportControls().pause();
+            mediaController.getTransportControls().pause();
         } else if (action.equalsIgnoreCase(ACTION_STOP)) {
-            mController.getTransportControls().stop();
+            mediaController.getTransportControls().stop();
         } else if (action.equalsIgnoreCase(ACTION_RESUME)) {
-            mController.getTransportControls().seekTo(resumePosition);
-            mController.getTransportControls().play();
+            mediaController.getTransportControls().seekTo(resumePosition);
+            mediaController.getTransportControls().play();
         }
     }
 
     private NotificationCompat.Action generateAction(int icon, String title, String intentAction) {
         Intent intent = new Intent(getApplicationContext(), MusicService.class);
         intent.setAction(intentAction);
-        if (mTrack != null) {
-            intent.putExtra(EXTRA_TRACK, mTrack);
+        if (track != null) {
+            intent.putExtra(EXTRA_TRACK, track);
         }
         PendingIntent pendingIntent = PendingIntent.getService(this, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return new NotificationCompat.Action.Builder(icon, title, pendingIntent).build();
     }
 
     private void buildNotification(NotificationCompat.Action action) {
-        if (mTrack != null) {
+        if (track != null) {
             android.support.v4.media.app.NotificationCompat.MediaStyle style = new android.support.v4.media.app.NotificationCompat.MediaStyle();
 
             Intent intent = new Intent(getApplicationContext(), MusicService.class);
@@ -193,8 +193,8 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
             PendingIntent pendingIntent = PendingIntent.getService(this, REQUEST_CODE, intent, 0);
             android.support.v4.app.NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                     .setSmallIcon(R.drawable.ic_launcher)
-                    .setContentTitle(mTrack.title)
-                    .setContentText(mTrack.author)
+                    .setContentTitle(track.title)
+                    .setContentText(track.author)
                     .setContentIntent(createContentIntent())
                     .setDeleteIntent(pendingIntent)
                     .setStyle(style);
@@ -210,7 +210,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     private PendingIntent createContentIntent() {
         Intent intent = new Intent(this, TrackActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.putExtra(TrackActivity.EXTRA_CAST, mCast);
+        intent.putExtra(TrackActivity.EXTRA_CAST, cast);
         return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
@@ -252,7 +252,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     @Subscribe
     public void onEvent(PlayNewEvent playNewEvent) {
         Log.d(TAG, "OnPlayNewEvent");
-        mTrack = playNewEvent.getTrack();
+        track = playNewEvent.getTrack();
         Log.d(TAG, "Position: " + resumePosition);
         handleAction(ACTION_PLAY);
     }
@@ -286,7 +286,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
         Log.d(TAG, "playNewMedia");
         try {
             mediaPlayer.reset();
-            mediaPlayer.setDataSource(mTrack.urls.get(0));
+            mediaPlayer.setDataSource(track.urls.get(0));
             resumePosition = 0;
         } catch (IOException e) {
             e.printStackTrace();
