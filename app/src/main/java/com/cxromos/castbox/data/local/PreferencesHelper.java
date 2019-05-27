@@ -3,7 +3,7 @@ package com.cxromos.castbox.data.local;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.cxromos.castbox.injection.ApplicationContext;
+import com.cxromos.castbox.injection.qualifiers.ApplicationContext;
 
 import javax.inject.Inject;
 

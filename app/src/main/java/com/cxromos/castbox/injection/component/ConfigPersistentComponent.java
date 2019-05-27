@@ -1,6 +1,6 @@
 package com.cxromos.castbox.injection.component;
 
-import com.cxromos.castbox.injection.ConfigPersistent;
+import com.cxromos.castbox.injection.qualifiers.ConfigPersistent;
 import com.cxromos.castbox.injection.module.ActivityModule;
 import com.cxromos.castbox.injection.module.FragmentModule;
 import com.cxromos.castbox.ui.base.BaseActivity;

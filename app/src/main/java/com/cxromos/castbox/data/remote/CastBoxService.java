@@ -6,6 +6,8 @@ import com.cxromos.castbox.BuildConfig;
 import com.cxromos.castbox.data.model.Casts;
 import com.cxromos.castbox.data.model.Tracks;
 
+import javax.inject.Inject;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -24,10 +26,17 @@ public interface CastBoxService {
     Observable<Tracks> getTracks(@Query("key") String key);
 
     class Factory {
-        public static CastBoxService makeChatBoxService(Context context) {
-            OkHttpClient okHttpClient = new OkHttpClient();
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY
+        private final OkHttpClient okHttpClient;
+        private final HttpLoggingInterceptor httpLoggingInterceptor;
+
+        @Inject
+        public Factory(OkHttpClient okHttpClient, HttpLoggingInterceptor httpLoggingInterceptor) {
+            this.okHttpClient = okHttpClient;
+            this.httpLoggingInterceptor = httpLoggingInterceptor;
+        }
+
+        public CastBoxService makeChatBoxService(Context context) {
+            httpLoggingInterceptor.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY
                     : HttpLoggingInterceptor.Level.NONE);
 //            okHttpClient.interceptors().add(logging);
 

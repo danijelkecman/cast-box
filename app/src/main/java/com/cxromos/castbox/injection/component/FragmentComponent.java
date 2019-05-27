@@ -1,6 +1,6 @@
 package com.cxromos.castbox.injection.component;
 
-import com.cxromos.castbox.injection.PerFragment;
+import com.cxromos.castbox.injection.qualifiers.PerFragment;
 import com.cxromos.castbox.injection.module.FragmentModule;
 
 import dagger.Subcomponent;

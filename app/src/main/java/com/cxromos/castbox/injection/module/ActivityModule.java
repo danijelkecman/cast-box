@@ -3,7 +3,7 @@ package com.cxromos.castbox.injection.module;
 import android.app.Activity;
 import android.content.Context;
 
-import com.cxromos.castbox.injection.ActivityContext;
+import com.cxromos.castbox.injection.qualifiers.ActivityContext;
 
 import dagger.Module;
 import dagger.Provides;

@@ -1,4 +1,4 @@
-package com.cxromos.castbox.injection;
+package com.cxromos.castbox.injection.qualifiers;
 
 import com.cxromos.castbox.injection.component.ConfigPersistentComponent;
 

@@ -1,6 +1,6 @@
 package com.cxromos.castbox.injection.component;
 
-import com.cxromos.castbox.injection.PerActivity;
+import com.cxromos.castbox.injection.qualifiers.PerActivity;
 import com.cxromos.castbox.injection.module.ActivityModule;
 import com.cxromos.castbox.ui.base.BaseActivity;
 import com.cxromos.castbox.ui.track.TrackActivity;

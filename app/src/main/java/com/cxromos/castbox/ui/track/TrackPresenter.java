@@ -2,7 +2,7 @@ package com.cxromos.castbox.ui.track;
 
 import com.cxromos.castbox.data.DataManager;
 import com.cxromos.castbox.data.model.Tracks;
-import com.cxromos.castbox.injection.ConfigPersistent;
+import com.cxromos.castbox.injection.qualifiers.ConfigPersistent;
 import com.cxromos.castbox.ui.base.BasePresenter;
 import com.cxromos.castbox.util.RxUtil;
 
