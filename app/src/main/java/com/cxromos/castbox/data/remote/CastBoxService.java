@@ -34,20 +34,5 @@ public interface CastBoxService {
             this.okHttpClient = okHttpClient;
             this.httpLoggingInterceptor = httpLoggingInterceptor;
         }
-
-        public CastBoxService makeChatBoxService(Context context) {
-            httpLoggingInterceptor.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY
-                    : HttpLoggingInterceptor.Level.NONE);
-//            okHttpClient.interceptors().add(logging);
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(CastBoxService.ENDPOINT)
-                    .client(okHttpClient)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                    .build();
-            return retrofit.create(CastBoxService.class);
-        }
-
     }
 }
